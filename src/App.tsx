@@ -27,8 +27,11 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/news" element={<NewsPage />} />
-          <Route path="/news/:category" element={<NewsPage />} />
-          <Route path="/news/:category/:slug" element={<ArticlePage />} />
+          <Route path="/news/bitcoin" element={<NewsPage />} />
+          <Route path="/news/ethereum" element={<NewsPage />} />
+          <Route path="/news/altcoins" element={<NewsPage />} />
+          <Route path="/news/exchanges" element={<NewsPage />} />
+          <Route path="/news/:slug" element={<ArticlePage />} />
           <Route path="/markets" element={<MarketsPage />} />
           <Route path="/learn" element={<LearnPage />} />
           <Route path="/learn/:subcategory" element={<LearnPage />} />

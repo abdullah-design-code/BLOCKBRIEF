@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Newspaper } from "lucide-react";
 import Header from "@/components/Header";
@@ -7,16 +7,15 @@ import ArticleCard from "@/components/ArticleCard";
 import { articles } from "@/data/articles";
 
 const categoryMap: Record<string, string> = {
-  bitcoin: "Bitcoin",
-  ethereum: "Ethereum",
-  altcoins: "Altcoins",
-  exchanges: "Exchange",
+  "/news/bitcoin": "Bitcoin",
+  "/news/ethereum": "Ethereum",
+  "/news/altcoins": "Altcoins",
+  "/news/exchanges": "Exchange",
 };
 
 const NewsPage = () => {
-  const { category } = useParams<{ category: string }>();
-
-  const categoryLabel = category ? categoryMap[category] || category : null;
+  const location = useLocation();
+  const categoryLabel = categoryMap[location.pathname] || null;
   const filtered = categoryLabel
     ? articles.filter((a) => a.category === categoryLabel)
     : articles;

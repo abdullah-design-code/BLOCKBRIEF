@@ -4,45 +4,46 @@
 
 @layer base {
   :root {
-    --background: 210 50% 6%;
-    --foreground: 160 60% 92%;
+    --background: 220 40% 7%;
+    --foreground: 200 60% 92%;
 
-    --card: 210 45% 9%;
-    --card-foreground: 160 40% 90%;
+    --card: 220 35% 10%;
+    --card-foreground: 200 40% 90%;
 
-    --popover: 210 45% 9%;
-    --popover-foreground: 160 40% 90%;
+    --popover: 220 35% 10%;
+    --popover-foreground: 200 40% 90%;
 
-    --primary: 160 75% 50%;
-    --primary-foreground: 210 50% 6%;
+    --primary: 190 100% 50%;
+    --primary-foreground: 220 40% 7%;
 
-    --secondary: 150 30% 15%;
-    --secondary-foreground: 160 60% 85%;
+    --secondary: 258 100% 65%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 30% 14%;
-    --muted-foreground: 210 15% 55%;
+    --muted: 220 25% 14%;
+    --muted-foreground: 220 15% 55%;
 
-    --accent: 160 90% 55%;
-    --accent-foreground: 210 50% 6%;
+    --accent: 190 100% 55%;
+    --accent-foreground: 220 40% 7%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 100% 61%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 210 25% 16%;
-    --input: 210 25% 16%;
-    --ring: 160 75% 50%;
+    --border: 220 20% 16%;
+    --input: 220 20% 16%;
+    --ring: 190 100% 50%;
 
     --radius: 0.75rem;
 
     /* Custom tokens */
-    --glow: 160 90% 60%;
-    --surface: 210 40% 11%;
-    --surface-hover: 210 35% 14%;
+    --glow: 190 100% 55%;
+    --surface: 220 30% 11%;
+    --surface-hover: 220 28% 14%;
     --impact-low: 45 90% 55%;
     --impact-medium: 30 90% 55%;
     --impact-high: 0 80% 58%;
-    --bullish: 145 70% 50%;
-    --bearish: 0 70% 55%;
+    --bullish: 150 100% 50%;
+    --bearish: 0 100% 61%;
+    --success: 150 100% 50%;
 
     --font-heading: 'Sora', sans-serif;
     --font-body: 'Manrope', sans-serif;
@@ -80,7 +81,7 @@
   }
 
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--glow)));
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
   }
 
   .gradient-dark {

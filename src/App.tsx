@@ -9,6 +9,7 @@ import NewsPage from "./pages/NewsPage";
 import ArticlePage from "./pages/ArticlePage";
 import MarketsPage from "./pages/MarketsPage";
 import LearnPage from "./pages/LearnPage";
+import LearnArticlePage from "./pages/LearnArticlePage";
 import ToolsPage from "./pages/ToolsPage";
 import CompanyPage from "./pages/CompanyPage";
 import AboutPage from "./pages/AboutPage";
@@ -34,7 +35,11 @@ const App = () => (
           <Route path="/news/:slug" element={<ArticlePage />} />
           <Route path="/markets" element={<MarketsPage />} />
           <Route path="/learn" element={<LearnPage />} />
-          <Route path="/learn/:subcategory" element={<LearnPage />} />
+          <Route path="/learn/beginner-guides" element={<LearnPage />} />
+          <Route path="/learn/trading-basics" element={<LearnPage />} />
+          <Route path="/learn/glossary" element={<LearnPage />} />
+          <Route path="/learn/how-to" element={<LearnPage />} />
+          <Route path="/learn/:slug" element={<LearnArticlePage />} />
           <Route path="/tools" element={<ToolsPage />} />
           <Route path="/company" element={<CompanyPage />} />
           <Route path="/about" element={<AboutPage />} />

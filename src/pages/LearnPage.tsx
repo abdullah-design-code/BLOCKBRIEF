@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { GraduationCap, BookOpen, ArrowRight, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,9 @@ const learnCategories = [
 ];
 
 const LearnPage = () => {
-  const { subcategory } = useParams<{ subcategory: string }>();
+  const location = useLocation();
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const subcategory = pathSegments.length > 1 ? pathSegments[1] : undefined;
 
   if (!subcategory) {
     return (

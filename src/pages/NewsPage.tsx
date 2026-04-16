@@ -11,6 +11,9 @@ const categoryMap: Record<string, string> = {
   "/news/ethereum": "Ethereum",
   "/news/altcoins": "Altcoins",
   "/news/exchanges": "Exchange",
+  "/news/market": "Market",
+  "/news/regulations": "Regulation",
+  "/news/trending": "Trending",
 };
 
 const NewsPage = () => {

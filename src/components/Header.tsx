@@ -10,10 +10,13 @@ const navItems = [
     label: "News",
     href: "/news",
     children: [
+      { label: "Market News", href: "/news/market" },
       { label: "Bitcoin", href: "/news/bitcoin" },
       { label: "Ethereum", href: "/news/ethereum" },
       { label: "Altcoins", href: "/news/altcoins" },
       { label: "Exchange Updates", href: "/news/exchanges" },
+      { label: "Regulations", href: "/news/regulations" },
+      { label: "Trending", href: "/news/trending" },
     ],
   },
   { label: "Markets", href: "/markets" },

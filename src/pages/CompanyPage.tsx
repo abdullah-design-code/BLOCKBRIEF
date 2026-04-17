@@ -5,9 +5,9 @@ import { ArrowRight, Users, Mail, Megaphone, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 
 const pages = [
-  { icon: Users, title: "About Us", desc: "Learn about ChainPulse and our mission.", href: "/about" },
+  { icon: Users, title: "About Us", desc: "Learn about BlockBrief and our mission.", href: "/about" },
   { icon: Mail, title: "Contact", desc: "Get in touch with our team.", href: "/contact" },
-  { icon: Megaphone, title: "Advertise", desc: "Reach crypto-savvy audiences with ChainPulse.", href: "/advertise" },
+  { icon: Megaphone, title: "Advertise", desc: "Reach crypto-savvy audiences with BlockBrief.", href: "/advertise" },
   { icon: Shield, title: "Privacy Policy", desc: "How we handle your data.", href: "/privacy-policy" },
 ];
 
@@ -17,7 +17,7 @@ const CompanyPage = () => (
     <main className="pt-24 pb-16">
       <div className="container max-w-3xl">
         <h1 className="font-heading text-3xl font-bold text-foreground mb-2">Company</h1>
-        <p className="text-muted-foreground mb-8">Everything about ChainPulse</p>
+        <p className="text-muted-foreground mb-8">Everything about BlockBrief</p>
         <div className="space-y-4">
           {pages.map((page, i) => (
             <motion.div key={page.href} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.08 }}>

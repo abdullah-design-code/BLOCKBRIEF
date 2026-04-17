@@ -18,10 +18,10 @@ const AdvertisePage = () => (
           <div className="rounded-md bg-primary/10 p-2">
             <Megaphone className="h-6 w-6 text-primary" />
           </div>
-          <h1 className="font-heading text-3xl font-bold text-foreground">Advertise with ChainPulse</h1>
+          <h1 className="font-heading text-3xl font-bold text-foreground">Advertise with BlockBrief</h1>
         </div>
         <p className="text-foreground/80 leading-relaxed mb-8">
-          Reach a highly engaged audience of crypto enthusiasts, traders, and beginners. ChainPulse offers multiple advertising options to help you grow your brand in the crypto space.
+          Reach a highly engaged audience of crypto enthusiasts, traders, and beginners. BlockBrief offers multiple advertising options to help you grow your brand in the crypto space.
         </p>
 
         <div className="grid grid-cols-3 gap-4 mb-10">
@@ -45,7 +45,7 @@ const AdvertisePage = () => (
         </div>
 
         <Button variant="glow" size="lg" asChild>
-          <a href="mailto:ads@chainpulse.com">Contact for Advertising</a>
+          <a href="mailto:ads@blockbrief.com">Contact for Advertising</a>
         </Button>
       </div>
     </main>

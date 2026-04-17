@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Zap, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import logoIcon from "@/assets/blockbrief-icon.png";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -51,9 +52,9 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <Zap className="h-6 w-6 text-primary" />
-          <span className="font-heading text-xl font-bold text-foreground">
-            Chain<span className="text-primary">Pulse</span>
+          <img src={logoIcon} alt="BlockBrief logo" width={28} height={28} className="h-7 w-7" />
+          <span className="font-heading text-xl font-bold tracking-tight text-foreground">
+            BLOCK<span className="text-primary">BRIEF</span>
           </span>
         </Link>
 

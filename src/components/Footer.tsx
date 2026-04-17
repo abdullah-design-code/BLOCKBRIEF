@@ -1,5 +1,5 @@
-import { Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import logoIcon from "@/assets/blockbrief-icon.png";
 
 const footerLinks = [
   {
@@ -38,13 +38,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <Link to="/" className="flex items-center gap-2 mb-3">
-              <Zap className="h-5 w-5 text-primary" />
-              <span className="font-heading text-lg font-bold text-foreground">
-                Chain<span className="text-primary">Pulse</span>
+              <img src={logoIcon} alt="BlockBrief logo" width={24} height={24} className="h-6 w-6" loading="lazy" />
+              <span className="font-heading text-lg font-bold tracking-tight text-foreground">
+                BLOCK<span className="text-primary">BRIEF</span>
               </span>
             </Link>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Crypto news made simple. Every story explained so anyone can understand.
+              Crypto news, live markets, and education — made simple for everyone.
             </p>
           </div>
 
@@ -68,7 +68,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-border mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <span>© 2026 ChainPulse. Not financial advice. Always do your own research.</span>
+          <span>© 2026 BlockBrief. Not financial advice. Always do your own research.</span>
           <div className="flex gap-4">
             <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
             <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>

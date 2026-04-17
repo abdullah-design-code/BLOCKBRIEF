@@ -32,7 +32,7 @@ const ContactPage = () => (
         </div>
 
         <div className="mt-8 text-center text-sm text-muted-foreground">
-          Or email us directly at <a href="mailto:hello@chainpulse.com" className="text-primary hover:underline">hello@chainpulse.com</a>
+          Or email us directly at <a href="mailto:hello@blockbrief.com" className="text-primary hover:underline">hello@blockbrief.com</a>
         </div>
       </div>
     </main>

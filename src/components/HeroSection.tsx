@@ -35,17 +35,23 @@ const HeroSection = () => {
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }} className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { icon: Zap, label: "Real-Time", desc: "Breaking crypto news as it happens" },
-            { icon: BookOpen, label: "Beginner Friendly", desc: "Every story explained simply" },
-            { icon: TrendingUp, label: "Market Impact", desc: "Know what matters for your portfolio" },
+            { icon: Zap, label: "Real-Time", desc: "Breaking crypto news as it happens", to: "/news/trending" },
+            { icon: BookOpen, label: "Beginner Friendly", desc: "Every story explained simply", to: "/learn/beginner-guides" },
+            { icon: TrendingUp, label: "Market Impact", desc: "Know what matters for your portfolio", to: "/news/market" },
           ].map((item) => (
-            <div key={item.label} className="glass rounded-lg p-5 flex items-start gap-4">
-              <div className="rounded-md bg-primary/10 p-2.5"><item.icon className="h-5 w-5 text-primary" /></div>
+            <Link
+              key={item.label}
+              to={item.to}
+              className="glass rounded-lg p-5 flex items-start gap-4 cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:border-primary/40 hover:shadow-[0_0_24px_hsl(var(--primary)/0.25)] group"
+            >
+              <div className="rounded-md bg-primary/10 p-2.5 group-hover:bg-primary/20 transition-colors">
+                <item.icon className="h-5 w-5 text-primary" />
+              </div>
               <div>
-                <p className="font-heading font-semibold text-foreground text-sm">{item.label}</p>
+                <p className="font-heading font-semibold text-foreground text-sm group-hover:text-primary transition-colors">{item.label}</p>
                 <p className="text-muted-foreground text-xs mt-0.5">{item.desc}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </motion.div>
       </div>

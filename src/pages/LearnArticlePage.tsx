@@ -63,10 +63,43 @@ const LearnArticlePage = () => {
           </div>
 
           <div className="prose-invert max-w-none">
-            {article.content.split("\n\n").map((paragraph, i) => (
-              <p key={i} className="text-foreground/85 leading-relaxed mb-4">{paragraph}</p>
-            ))}
+            {article.content.split("\n\n").map((paragraph, i) => {
+              const trimmed = paragraph.trim();
+              if (trimmed.startsWith("## ")) {
+                return (
+                  <h2 key={i} className="font-heading text-2xl font-bold text-foreground mt-8 mb-3">
+                    {trimmed.replace(/^##\s+/, "")}
+                  </h2>
+                );
+              }
+              if (trimmed.startsWith("### ")) {
+                return (
+                  <h3 key={i} className="font-heading text-xl font-semibold text-foreground mt-6 mb-2">
+                    {trimmed.replace(/^###\s+/, "")}
+                  </h3>
+                );
+              }
+              return (
+                <p key={i} className="text-foreground/85 leading-relaxed mb-4 whitespace-pre-line">
+                  {trimmed}
+                </p>
+              );
+            })}
           </div>
+
+          {article.whatItMeans && (
+            <aside className="mt-10 rounded-xl border border-primary/30 bg-primary/5 p-6">
+              <h3 className="font-heading text-lg font-bold text-primary mb-2">What It Means</h3>
+              <p className="text-foreground/90 leading-relaxed">{article.whatItMeans}</p>
+            </aside>
+          )}
+
+          {article.beginnerTip && (
+            <aside className="mt-4 rounded-xl border border-accent/30 bg-accent/5 p-6">
+              <h3 className="font-heading text-lg font-bold text-accent mb-2">💡 Beginner Tip</h3>
+              <p className="text-foreground/90 leading-relaxed">{article.beginnerTip}</p>
+            </aside>
+          )}
         </article>
 
         {related.length > 0 && (

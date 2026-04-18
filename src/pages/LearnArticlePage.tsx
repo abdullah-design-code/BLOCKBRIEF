@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { getLearnArticleBySlug, getRelatedLearnArticles } from "@/data/learnArticles";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO, { SITE_URL } from "@/components/SEO";
 
 const LearnArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -13,6 +14,7 @@ const LearnArticlePage = () => {
   if (!article) {
     return (
       <div className="min-h-screen bg-background">
+        <SEO title="Article Not Found — BlockBrief" description="The crypto guide you are looking for was not found." path={`/learn/${slug}`} />
         <Header />
         <div className="container pt-32 pb-16 text-center">
           <h1 className="font-heading text-3xl font-bold text-foreground mb-4">Article not found</h1>
@@ -30,8 +32,37 @@ const LearnArticlePage = () => {
     year: "numeric", month: "long", day: "numeric",
   });
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.summary,
+    image: [`${SITE_URL}${article.image}`],
+    datePublished: article.publishedAt,
+    author: { "@type": "Organization", name: "BlockBrief" },
+    publisher: {
+      "@type": "Organization",
+      name: "BlockBrief",
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/favicon.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/learn/${article.slug}` },
+    articleSection: article.category,
+    educationalLevel: "Beginner",
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={`${article.title} — BlockBrief`}
+        description={article.summary}
+        keywords={`${article.category.toLowerCase()}, crypto for beginners, ${article.title.toLowerCase()}`}
+        path={`/learn/${article.slug}`}
+        image={article.image}
+        type="article"
+        publishedTime={article.publishedAt}
+        category={article.category}
+        jsonLd={jsonLd}
+      />
       <Header />
       <main className="pt-24 pb-16">
         <article className="container max-w-4xl">

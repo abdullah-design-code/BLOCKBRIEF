@@ -1,8 +1,14 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const PrivacyPolicyPage = () => (
   <div className="min-h-screen bg-background">
+    <SEO
+      title="Privacy Policy — BlockBrief"
+      description="How BlockBrief collects, uses, and protects your data. Read our full privacy policy."
+      path="/privacy-policy"
+    />
     <Header />
     <main className="pt-24 pb-16">
       <div className="container max-w-3xl">

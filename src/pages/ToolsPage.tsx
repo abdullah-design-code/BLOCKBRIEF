@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Calculator, BarChart3, Wallet, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -12,6 +13,12 @@ const tools = [
 
 const ToolsPage = () => (
   <div className="min-h-screen bg-background">
+    <SEO
+      title="Free Crypto Tools — Calculator, Tracker & Converter"
+      description="Free crypto tools: profit calculator, portfolio tracker, wallet checker, and crypto converter — all in one place."
+      keywords="crypto tools, profit calculator, portfolio tracker, crypto converter"
+      path="/tools"
+    />
     <Header />
     <main className="pt-24 pb-16">
       <div className="container">

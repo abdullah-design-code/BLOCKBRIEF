@@ -1,8 +1,15 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const AboutPage = () => (
   <div className="min-h-screen bg-background">
+    <SEO
+      title="About BlockBrief — Crypto News for Everyone"
+      description="BlockBrief makes crypto news, markets, and education accessible to beginners. Every story includes a plain-English 'What It Means' explainer."
+      keywords="about blockbrief, crypto news platform, crypto education"
+      path="/about"
+    />
     <Header />
     <main className="pt-24 pb-16">
       <div className="container max-w-3xl">

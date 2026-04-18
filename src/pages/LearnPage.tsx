@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getLearnArticlesByCategory, learnArticles } from "@/data/learnArticles";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const learnCategories = [
   { slug: "beginner-guides", label: "Beginner Guides", desc: "Start your crypto journey with simple, clear explanations" },
@@ -13,6 +14,13 @@ const learnCategories = [
   { slug: "glossary", label: "Glossary", desc: "Key crypto terms explained in plain English" },
   { slug: "how-to", label: "How-To Articles", desc: "Step-by-step tutorials for practical crypto tasks" },
 ];
+
+const learnSeoMap: Record<string, { title: string; desc: string; keywords: string }> = {
+  "beginner-guides": { title: "Crypto for Beginners — Beginner Guides | BlockBrief", desc: "Learn crypto from scratch. Beginner-friendly guides on Bitcoin, blockchain, wallets, and how to start trading safely.", keywords: "crypto for beginners, what is bitcoin, crypto explained, blockchain basics" },
+  "trading-basics": { title: "How to Trade Crypto — Trading Basics | BlockBrief", desc: "Learn how to read charts, manage risk, and trade crypto smarter. Beginner-friendly trading lessons that actually work.", keywords: "how to trade crypto, crypto charts, RSI, risk management, trading basics" },
+  "glossary": { title: "Crypto Glossary — Terms Explained Simply | BlockBrief", desc: "Crypto terms explained in plain English: market cap, volume, bull market, altcoin, liquidity, and more.", keywords: "crypto glossary, crypto terms, market cap, altcoin, bull market" },
+  "how-to": { title: "How-To Crypto Guides — Step-by-Step | BlockBrief", desc: "Step-by-step crypto tutorials: create a wallet, buy crypto safely, transfer coins, set stop-loss, track your portfolio.", keywords: "how to buy crypto, create crypto wallet, transfer crypto, stop loss" },
+};
 
 const LearnPage = () => {
   const location = useLocation();
@@ -22,6 +30,12 @@ const LearnPage = () => {
   if (!subcategory) {
     return (
       <div className="min-h-screen bg-background">
+        <SEO
+          title="Crypto Learning Hub — Beginner Guides & Trading Lessons"
+          description="Free crypto education: beginner guides, trading basics, glossary, and step-by-step how-to tutorials. Learn crypto the easy way."
+          keywords="crypto for beginners, learn crypto, how to trade crypto, crypto explained, blockchain education"
+          path="/learn"
+        />
         <Header />
         <main className="pt-24 pb-16">
           <div className="container">
@@ -107,9 +121,11 @@ const LearnPage = () => {
 
   const categoryData = learnCategories.find((c) => c.slug === subcategory);
   const items = getLearnArticlesByCategory(subcategory);
+  const seo = learnSeoMap[subcategory] || { title: `${categoryData?.label || subcategory} — BlockBrief`, desc: categoryData?.desc || "Crypto education by BlockBrief.", keywords: "crypto, learn crypto" };
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title={seo.title} description={seo.desc} keywords={seo.keywords} path={location.pathname} />
       <Header />
       <main className="pt-24 pb-16">
         <div className="container">

@@ -6,6 +6,7 @@ import { getArticleBySlug, getRelatedArticles } from "@/data/articles";
 import ArticleCard from "@/components/ArticleCard";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO, { SITE_URL } from "@/components/SEO";
 
 const impactVariant = {
   high: "impact_high" as const,
@@ -20,6 +21,7 @@ const ArticlePage = () => {
   if (!article) {
     return (
       <div className="min-h-screen bg-background">
+        <SEO title="Article Not Found — BlockBrief" description="The crypto news article you are looking for was not found." path={`/news/${slug}`} />
         <Header />
         <div className="container pt-32 pb-16 text-center">
           <h1 className="font-heading text-3xl font-bold text-foreground mb-4">Article not found</h1>
@@ -37,8 +39,36 @@ const ArticlePage = () => {
     year: "numeric", month: "long", day: "numeric",
   });
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.summary,
+    image: [`${SITE_URL}${article.image}`],
+    datePublished: article.publishedAt,
+    author: { "@type": "Organization", name: "BlockBrief" },
+    publisher: {
+      "@type": "Organization",
+      name: "BlockBrief",
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/favicon.png` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/news/${article.slug}` },
+    articleSection: article.category,
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={`${article.title} — BlockBrief`}
+        description={article.summary}
+        keywords={`${article.category.toLowerCase()}, crypto news, ${article.title.toLowerCase()}`}
+        path={`/news/${article.slug}`}
+        image={article.image}
+        type="article"
+        publishedTime={article.publishedAt}
+        category={article.category}
+        jsonLd={jsonLd}
+      />
       <Header />
       <main className="pt-24 pb-16">
         <article className="container max-w-4xl">

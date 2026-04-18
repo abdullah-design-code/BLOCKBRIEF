@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MarketSentiment from "@/components/MarketSentiment";
+import SEO from "@/components/SEO";
 import { TrendingUp, TrendingDown, Loader2 } from "lucide-react";
 import { useCoins, formatUsd, formatPct } from "@/hooks/useCryptoData";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,6 +11,12 @@ const MarketsPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Live Crypto Markets — Bitcoin, Ethereum & Top Coin Prices"
+        description="Real-time crypto market data: live Bitcoin price, Ethereum, top 10 coins, market cap, 24h volume, and Fear & Greed Index. Auto-refreshing every 30 seconds."
+        keywords="crypto prices, bitcoin price, ethereum price, live crypto market, market cap, fear and greed index"
+        path="/markets"
+      />
       <Header />
       <main className="pt-24 pb-16">
         <div className="container">

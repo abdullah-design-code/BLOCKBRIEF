@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Megaphone, Users, Eye, TrendingUp } from "lucide-react";
 
@@ -11,6 +12,12 @@ const stats = [
 
 const AdvertisePage = () => (
   <div className="min-h-screen bg-background">
+    <SEO
+      title="Advertise on BlockBrief — Reach 500K+ Crypto Readers"
+      description="Reach a highly engaged crypto audience. Sponsorships, banners, and native ad placements available on BlockBrief."
+      keywords="crypto advertising, blockbrief advertise, crypto media kit"
+      path="/advertise"
+    />
     <Header />
     <main className="pt-24 pb-16">
       <div className="container max-w-3xl">

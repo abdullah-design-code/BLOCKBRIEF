@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { ArrowRight, Users, Mail, Megaphone, Shield } from "lucide-react";
 import { motion } from "framer-motion";
@@ -13,6 +14,11 @@ const pages = [
 
 const CompanyPage = () => (
   <div className="min-h-screen bg-background">
+    <SEO
+      title="Company — About BlockBrief"
+      description="Everything about BlockBrief: our mission, team, advertising, and policies."
+      path="/company"
+    />
     <Header />
     <main className="pt-24 pb-16">
       <div className="container max-w-3xl">

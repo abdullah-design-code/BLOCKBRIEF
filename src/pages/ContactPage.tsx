@@ -1,10 +1,17 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
 
 const ContactPage = () => (
   <div className="min-h-screen bg-background">
+    <SEO
+      title="Contact BlockBrief — Get in Touch"
+      description="Have questions, tips, or partnership ideas? Contact the BlockBrief team — we read every message."
+      keywords="contact blockbrief, crypto news contact"
+      path="/contact"
+    />
     <Header />
     <main className="pt-24 pb-16">
       <div className="container max-w-2xl">

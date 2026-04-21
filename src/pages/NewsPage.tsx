@@ -35,6 +35,19 @@ const NewsPage = () => {
   const filtered = categoryLabel
     ? articles.filter((a) => a.category === categoryLabel)
     : articles;
+  const [posts, setPosts] = useState([]);
+
+useEffect(() => {
+  client
+    .fetch(`*[_type == "post"] | order(_createdAt desc){
+      _id,
+      title,
+      slug,
+      image,
+      category
+    }`)
+    .then(setPosts);
+}, []);
 
   const title = categoryLabel ? `${categoryLabel} News` : "All News";
   const seo = categoryLabel ? seoMap[categoryLabel] : { title: "Crypto News — BlockBrief", desc: "All the latest cryptocurrency news, market updates, and analysis. Bitcoin, Ethereum, altcoins, and beyond.", keywords: "crypto news, cryptocurrency news, bitcoin news" };

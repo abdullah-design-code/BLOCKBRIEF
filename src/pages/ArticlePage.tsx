@@ -1,170 +1,111 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { client, urlFor } from "@/lib/sanity";
 import { useParams, Link } from "react-router-dom";
+import { client, urlFor } from "@/lib/sanity";
 import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getArticleBySlug, getRelatedArticles } from "@/data/articles";
-import ArticleCard from "@/components/ArticleCard";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SEO, { SITE_URL } from "@/components/SEO";
+import SEO from "@/components/SEO";
 
 const impactVariant = {
-  high: "impact_high" as const,
-  medium: "impact_medium" as const,
-  low: "impact_low" as const,
+  high: "impact_high",
+  medium: "impact_medium",
+  low: "impact_low",
 };
-
-const { slug } = useParams();
-const [post, setPost] = useState<any>(null);
-
-useEffect(() => {
-  client
-    .fetch(
-      `*[_type == "post" && slug.current == $slug][0]{
-        title,
-        image,
-        content,
-        category
-      }`,
-      { slug }
-    )
-    .then(setPost);
-}, [slug]);
 
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const article = getArticleBySlug(slug || "");
+  const [post, setPost] = useState<any>(null);
 
-  if (!article) {
+  useEffect(() => {
+    if (!slug) return;
+
+    client
+      .fetch(
+        `*[_type == "post" && slug.current == $slug][0]{
+          title,
+          image,
+          content,
+          category,
+          publishedAt
+        }`,
+        { slug }
+      )
+      .then(setPost);
+  }, [slug]);
+
+  if (!post) {
     return (
-      <div className="min-h-screen bg-background">
-        <SEO title="Article Not Found — BlockBrief" description="The crypto news article you are looking for was not found." path={`/news/${slug}`} />
-        <Header />
-        <div className="container pt-32 pb-16 text-center">
-          <h1 className="font-heading text-3xl font-bold text-foreground mb-4">Article not found</h1>
-          <Button variant="glow" asChild>
-            <Link to="/news">Back to News</Link>
-          </Button>
-        </div>
-        <Footer />
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading...
       </div>
     );
   }
 
-  const related = getRelatedArticles(article);
-  const date = new Date(article.publishedAt).toLocaleDateString("en-US", {
-    year: "numeric", month: "long", day: "numeric",
-  });
+  const date = post.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "";
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    headline: article.title,
-    description: article.summary,
-    image: [`${SITE_URL}${article.image}`],
-    datePublished: article.publishedAt,
-    author: { "@type": "Organization", name: "BlockBrief" },
-    publisher: {
-      "@type": "Organization",
-      name: "BlockBrief",
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/favicon.png` },
-    },
-    mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/news/${article.slug}` },
-    articleSection: article.category,
-  };
-
-  return ( if (!post) return <div>Loading...</div>;
-
-return (
-  <div>
-
-    {/* TITLE */}
-    <h1>{post.title}</h1>
-
-    {/* IMAGE */}
-    {post.image && (
-      <img src={urlFor(post.image).width(800).url()} />
-    )}
-
-    {/* CATEGORY */}
-    <p>{post.category}</p>
-
-    {/* CONTENT */}
-    <p>{post.content}</p>
-
-  </div>
-);
+  return (
     <div className="min-h-screen bg-background">
       <SEO
-        title={`${article.title} — BlockBrief`}
-        description={article.summary}
-        keywords={`${article.category.toLowerCase()}, crypto news, ${article.title.toLowerCase()}`}
-        path={`/news/${article.slug}`}
-        image={article.image}
-        type="article"
-        publishedTime={article.publishedAt}
-        category={article.category}
-        jsonLd={jsonLd}
+        title={`${post.title} — BlockBrief`}
+        description={post.content?.slice(0, 150)}
+        path={`/news/${slug}`}
       />
+
       <Header />
+
       <main className="pt-24 pb-16">
         <article className="container max-w-4xl">
-          <Button variant="ghost" size="sm" className="mb-6" asChild>
+
+          {/* BACK BUTTON */}
+          <Button variant="ghost" asChild>
             <Link to="/news">
-              <ArrowLeft className="h-4 w-4" /> Back to News
+              <ArrowLeft className="h-4 w-4 mr-1" />
+              Back to News
             </Link>
           </Button>
 
-          <div className="flex items-center gap-2 mb-4">
-            <Badge variant="category">{article.category}</Badge>
-            <Badge variant={impactVariant[article.impact]}>{article.impact} impact</Badge>
+          {/* CATEGORY */}
+          <div className="flex gap-2 mt-4">
+            <Badge variant="category">{post.category}</Badge>
           </div>
 
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            {article.title}
+          {/* TITLE */}
+          <h1 className="text-3xl font-bold mt-4">
+            {post.title}
           </h1>
 
-          <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
-            <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {date}</span>
-            <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> {article.readTime} read</span>
+          {/* DATE */}
+          <div className="flex gap-4 text-sm text-gray-400 mt-2">
+            <span className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              {date}
+            </span>
           </div>
 
-          <div className="rounded-xl overflow-hidden mb-8">
+          {/* IMAGE */}
+          {post.image && (
             <img
-              src={article.image}
-              alt={article.title}
-              className="w-full aspect-[2/1] object-cover"
+              src={urlFor(post.image).width(900).url()}
+              className="w-full mt-6 rounded-xl"
             />
+          )}
+
+          {/* CONTENT */}
+          <div className="mt-6 text-gray-200 leading-7 whitespace-pre-line">
+            {post.content}
           </div>
 
-          <div className="prose-invert max-w-none">
-            {article.content.split("\n\n").map((paragraph, i) => (
-              <p key={i} className="text-foreground/85 leading-relaxed mb-4">{paragraph}</p>
-            ))}
-          </div>
-
-          <div className="rounded-xl bg-primary/5 border border-primary/20 p-6 my-8">
-            <h3 className="font-heading text-lg font-bold text-primary mb-3 flex items-center gap-2">
-              💡 What It Means
-            </h3>
-            <p className="text-foreground/80 leading-relaxed">{article.whatItMeans}</p>
-          </div>
         </article>
-
-        {related.length > 0 && (
-          <section className="container max-w-4xl mt-16">
-            <h2 className="font-heading text-2xl font-bold text-foreground mb-6">Related News</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {related.map((a) => (
-                <ArticleCard key={a.id} article={a} />
-              ))}
-            </div>
-          </section>
-        )}
       </main>
+
       <Footer />
     </div>
   );

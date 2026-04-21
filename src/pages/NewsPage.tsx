@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { client, urlFor } from "@/lib/sanity";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Newspaper } from "lucide-react";

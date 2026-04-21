@@ -1,63 +1,91 @@
 import { useEffect, useState } from "react";
 import { client, urlFor } from "@/lib/sanity";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Newspaper } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ArticleCard from "@/components/ArticleCard";
+import SEO from "@/components/SEO";
+import { articles } from "@/data/articles";
+
+const categoryMap: Record<string, string> = {
+  "/news/bitcoin": "Bitcoin",
+  "/news/ethereum": "Ethereum",
+  "/news/altcoins": "Altcoins",
+  "/news/exchanges": "Exchange",
+  "/news/market": "Market",
+  "/news/regulations": "Regulation",
+  "/news/trending": "Trending",
+};
 
 const NewsPage = () => {
-  const [posts, setPosts] = useState<any[]>([]);
   const location = useLocation();
+  const categoryLabel = categoryMap[location.pathname] || null;
+
+  // 🔥 SANITY POSTS
+  const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
     client
       .fetch(`*[_type == "post"] | order(_createdAt desc){
         _id,
         title,
-        slug,
+        "slug": slug.current,
         image,
         category
       }`)
-      .then((data) => {
-        console.log("SANITY DATA:", data); // 👈 DEBUG
-        setPosts(data);
-      });
+      .then(setPosts);
   }, []);
+
+  // 🔥 LOCAL POSTS
+  const localFiltered = categoryLabel
+    ? articles.filter((a) => a.category === categoryLabel)
+    : articles;
+
+  // 🔥 MERGE BOTH
+  const allPosts = [
+    ...posts.map((p) => ({
+      id: p._id,
+      title: p.title,
+      slug: p.slug,
+      image: p.image ? urlFor(p.image).width(400).url() : "",
+      category: p.category || "General",
+    })),
+    ...localFiltered,
+  ];
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="Crypto News — BlockBrief" description="Latest crypto news" />
       <Header />
 
-      <main className="pt-24 pb-16 container">
-        <h1 className="text-3xl font-bold mb-8">Latest News</h1>
+      <main className="pt-24 pb-16">
+        <div className="container">
 
-        {/* 🔴 AGAR EMPTY HAI */}
-        {posts.length === 0 && (
-          <p>No posts found (check Sanity)</p>
-        )}
-
-        {/* ✅ SANITY DATA SHOW */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <div key={post._id} className="border p-4 rounded-lg">
-              
-              {post.image && (
-                <img
-                  src={urlFor(post.image).width(400).url()}
-                  className="w-full h-40 object-cover rounded"
-                />
-              )}
-
-              <h2 className="text-xl font-bold mt-3">{post.title}</h2>
-              <p className="text-sm text-gray-500">{post.category}</p>
-
-              <Link
-                to={`/news/${post.slug?.current}`}
-                className="text-blue-500 mt-2 inline-block"
-              >
-                Read More →
-              </Link>
+          <div className="flex items-center gap-3 mb-8">
+            <div className="rounded-md bg-primary/10 p-2">
+              <Newspaper className="h-5 w-5 text-primary" />
             </div>
-          ))}
+            <h1 className="text-3xl font-bold">Latest News</h1>
+          </div>
+
+          {allPosts.length === 0 ? (
+            <p>No posts found</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {allPosts.map((article, i) => (
+                <motion.div
+                  key={article.id || i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <ArticleCard article={article} />
+                </motion.div>
+              ))}
+            </div>
+          )}
+
         </div>
       </main>
 

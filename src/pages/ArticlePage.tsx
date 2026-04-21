@@ -17,6 +17,23 @@ const impactVariant = {
   low: "impact_low" as const,
 };
 
+const { slug } = useParams();
+const [post, setPost] = useState<any>(null);
+
+useEffect(() => {
+  client
+    .fetch(
+      `*[_type == "post" && slug.current == $slug][0]{
+        title,
+        image,
+        content,
+        category
+      }`,
+      { slug }
+    )
+    .then(setPost);
+}, [slug]);
+
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const article = getArticleBySlug(slug || "");

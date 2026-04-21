@@ -76,7 +76,27 @@ const ArticlePage = () => {
     articleSection: article.category,
   };
 
-  return (
+  return ( if (!post) return <div>Loading...</div>;
+
+return (
+  <div>
+
+    {/* TITLE */}
+    <h1>{post.title}</h1>
+
+    {/* IMAGE */}
+    {post.image && (
+      <img src={urlFor(post.image).width(800).url()} />
+    )}
+
+    {/* CATEGORY */}
+    <p>{post.category}</p>
+
+    {/* CONTENT */}
+    <p>{post.content}</p>
+
+  </div>
+);
     <div className="min-h-screen bg-background">
       <SEO
         title={`${article.title} — BlockBrief`}

@@ -57,13 +57,17 @@ const NewsPage = () => {
     ? articles.filter((a) => a.category === categoryLabel)
     : articles;
 
-  const sanityMapped = posts.map((p) => ({
-    id: p._id,
-    title: p.title,
-    slug: p.slug,
-    image: p.image ? urlFor(p.image).width(400).url() : "",
-    category: p.category || "General",
-  }));
+const sanityMapped = posts.map((p) => ({
+  id: p._id,
+  title: p.title,
+  slug: p.slug,
+  image: p.image ? urlFor(p.image).width(400).url() : "",
+  category: p.category || "General",
+
+  summary: p.title,
+  publishedAt: new Date().toISOString(),
+  readTime: "3 min",
+}));
 
   const allPosts = [...sanityMapped, ...localFiltered];
 

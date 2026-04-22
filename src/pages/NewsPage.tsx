@@ -67,6 +67,8 @@ const sanityMapped = posts.map((p) => ({
   summary: p.title,
   publishedAt: new Date().toISOString(),
   readTime: "3 min",
+
+  impact: "medium",
 }));
 
   const allPosts = [...sanityMapped, ...localFiltered];

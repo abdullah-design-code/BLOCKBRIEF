@@ -33,25 +33,25 @@ const NewsPage = () => {
 
   const [posts, setPosts] = useState<SanityPost[]>([]);
 
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "post"] | order(_createdAt desc){
-          _id,
-          title,
-          "slug": slug.current,
-          image,
-          category
-        }`
-      )
-      .then((data) => {
-        console.log("SANITY POSTS:", data); // debug
-        setPosts(data || []);
-      })
-      .catch((err) => {
-        console.log("Sanity fetch error:", err);
-      });
-  }, []);
+ useEffect(() => {
+  client
+    .fetch(
+      `*[_type == "post"] | order(_createdAt desc){
+        _id,
+        title,
+        "slug": coalesce(slug.current, _id),
+        image,
+        category
+      }`
+    )
+    .then((data) => {
+      console.log("SANITY POSTS:", data);
+      setPosts(data || []);
+    })
+    .catch((err) => {
+      console.log("Sanity fetch error:", err);
+    });
+}, []);
 
   const localFiltered = categoryLabel
     ? articles.filter((a) => a.category === categoryLabel)

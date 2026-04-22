@@ -31,7 +31,6 @@ const NewsPage = () => {
   const location = useLocation();
   const categoryLabel = categoryMap[location.pathname] || null;
 
-  // ✅ SANITY POSTS
   const [posts, setPosts] = useState<SanityPost[]>([]);
 
   useEffect(() => {
@@ -45,16 +44,19 @@ const NewsPage = () => {
           category
         }`
       )
-      .then((data) => setPosts(data))
-      .catch((err) => console.log("Sanity error:", err));
+      .then((data) => {
+        console.log("SANITY POSTS:", data); // debug
+        setPosts(data || []);
+      })
+      .catch((err) => {
+        console.log("Sanity fetch error:", err);
+      });
   }, []);
 
-  // ✅ LOCAL POSTS (OLD DATA)
   const localFiltered = categoryLabel
     ? articles.filter((a) => a.category === categoryLabel)
     : articles;
 
-  // ✅ NORMALIZE SANITY DATA
   const sanityMapped = posts.map((p) => ({
     id: p._id,
     title: p.title,
@@ -63,7 +65,6 @@ const NewsPage = () => {
     category: p.category || "General",
   }));
 
-  // ✅ FINAL MERGED DATA
   const allPosts = [...sanityMapped, ...localFiltered];
 
   return (
@@ -86,10 +87,10 @@ const NewsPage = () => {
             <h1 className="text-3xl font-bold">Latest News</h1>
           </div>
 
-          {/* CONTENT */}
+          {/* POSTS */}
           {allPosts.length === 0 ? (
             <p className="text-muted-foreground">
-              No posts found (check Sanity or local data)
+              No posts found (check Sanity dashboard)
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

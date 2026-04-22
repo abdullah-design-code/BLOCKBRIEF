@@ -17,7 +17,7 @@ type SanityPost = {
 const NewsFeed = () => {
   const [posts, setPosts] = useState<SanityPost[]>([]);
 
-  useEffect(() => {
+useEffect(() => {
     client
       .fetch(
         `*[_type == "post"] | order(_createdAt desc){
@@ -29,6 +29,7 @@ const NewsFeed = () => {
         }`
       )
       .then((data) => {
+        console.log("NewsFeed data:", data);
         setPosts(data || []);
       })
       .catch((err) => {

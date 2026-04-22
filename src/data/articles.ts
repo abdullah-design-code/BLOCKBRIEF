@@ -1,3 +1,4 @@
+import type { Article } from "@/components/ArticleCard";
 import globalMarketImg from "@/assets/news/global-market-war-inflation.jpg";
 import cryptoVolatilityImg from "@/assets/news/crypto-volatility.jpg";
 import bitcoinBreakoutImg from "@/assets/news/bitcoin-breakout.jpg";

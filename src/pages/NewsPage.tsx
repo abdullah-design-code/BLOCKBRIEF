@@ -7,7 +7,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
 import SEO from "@/components/SEO";
-import { articles } from "@/data/articles";
 
 const categoryMap: Record<string, string> = {
   "/news/bitcoin": "Bitcoin",
@@ -30,48 +29,46 @@ type SanityPost = {
 const NewsPage = () => {
   const location = useLocation();
   const categoryLabel = categoryMap[location.pathname] || null;
-
   const [posts, setPosts] = useState<SanityPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
- useEffect(() => {
-  client
-    .fetch(
-      `*[_type == "post"] | order(_createdAt desc){
-        _id,
-        title,
-        "slug": coalesce(slug.current, _id),
-        image,
-        category
-      }`
-    )
-    .then((data) => {
-      console.log("SANITY POSTS:", data);
-      setPosts(data || []);
-    })
-    .catch((err) => {
-      console.log("Sanity fetch error:", err);
-    });
-}, []);
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "post"] | order(_createdAt desc){
+          _id,
+          title,
+          "slug": coalesce(slug.current, _id),
+          image,
+          category
+        }`
+      )
+      .then((data) => {
+        console.log("SANITY POSTS:", data);
+        setPosts(data || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Sanity fetch error:", err);
+        setLoading(false);
+      });
+  }, []);
 
-  const localFiltered = categoryLabel
-    ? articles.filter((a) => a.category === categoryLabel)
-    : articles;
+  const sanityMapped = posts.map((p) => ({
+    id: p._id,
+    title: p.title,
+    slug: p.slug,
+    image: p.image ? urlFor(p.image).width(400).url() : "",
+    category: p.category || "General",
+    summary: p.title,
+    publishedAt: new Date().toISOString(),
+    readTime: "3 min",
+    impact: "medium" as const,
+  }));
 
-const sanityMapped = posts.map((p) => ({
-  id: p._id,
-  title: p.title,
-  slug: p.slug,
-  image: p.image ? urlFor(p.image).width(400).url() : "",
-  category: p.category || "General",
-
-  summary: p.title,
-  publishedAt: new Date().toISOString(),
-  readTime: "3 min",
-
-  impact: "medium",
-}));
-
-  const allPosts = [...sanityMapped, ...localFiltered];
+  const filtered = categoryLabel
+    ? sanityMapped.filter((a) => a.category === categoryLabel)
+    : sanityMapped;
 
   return (
     <div className="min-h-screen bg-background">
@@ -79,13 +76,9 @@ const sanityMapped = posts.map((p) => ({
         title="Crypto News — BlockBrief"
         description="Latest crypto news, updates and analysis"
       />
-
       <Header />
-
       <main className="pt-24 pb-16">
         <div className="container">
-
-          {/* HEADER */}
           <div className="flex items-center gap-3 mb-8">
             <div className="rounded-md bg-primary/10 p-2">
               <Newspaper className="h-5 w-5 text-primary" />
@@ -93,14 +86,13 @@ const sanityMapped = posts.map((p) => ({
             <h1 className="text-3xl font-bold">Latest News</h1>
           </div>
 
-          {/* POSTS */}
-          {allPosts.length === 0 ? (
-            <p className="text-muted-foreground">
-              No posts found (check Sanity dashboard)
-            </p>
+          {loading ? (
+            <p className="text-muted-foreground">Loading posts...</p>
+          ) : filtered.length === 0 ? (
+            <p className="text-muted-foreground">No posts found</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {allPosts.map((article, i) => (
+              {filtered.map((article, i) => (
                 <motion.div
                   key={article.id || i}
                   initial={{ opacity: 0, y: 20 }}
@@ -111,10 +103,8 @@ const sanityMapped = posts.map((p) => ({
               ))}
             </div>
           )}
-
         </div>
       </main>
-
       <Footer />
     </div>
   );

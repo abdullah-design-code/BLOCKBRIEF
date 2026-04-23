@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
 import SEO from "@/components/SEO";
+import { articles } from "@/data/articles";
 
 const categoryMap: Record<string, string> = {
   "/news/bitcoin": "Bitcoin",
@@ -66,9 +67,17 @@ const NewsPage = () => {
     impact: "medium" as const,
   }));
 
+  // Sanity + local articles dono mix karo
+  const localMapped = articles.map((a) => ({
+    ...a,
+    impact: (a.impact || "medium") as "high" | "medium" | "low",
+  }));
+
+  const allPosts = [...sanityMapped, ...localMapped];
+
   const filtered = categoryLabel
-    ? sanityMapped.filter((a) => a.category === categoryLabel)
-    : sanityMapped;
+    ? allPosts.filter((a) => a.category === categoryLabel)
+    : allPosts;
 
   return (
     <div className="min-h-screen bg-background">

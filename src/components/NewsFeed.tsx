@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import ArticleCard from "@/components/ArticleCard";
+import { articles } from "@/data/articles"; // ✅ YOUR OLD DATA RESTORED
 
 type Post = {
   id: string;
@@ -19,7 +20,7 @@ type Post = {
 const NewsFeed = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
-  // ✅ SUPABASE FETCH ONLY
+  // ✅ SUPABASE POSTS
   useEffect(() => {
     const fetchPosts = async () => {
       const { data, error } = await supabase
@@ -28,7 +29,7 @@ const NewsFeed = () => {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Supabase fetch error:", error);
+        console.error("Supabase error:", error);
         return;
       }
 
@@ -38,8 +39,8 @@ const NewsFeed = () => {
     fetchPosts();
   }, []);
 
-  // ✅ MAP SUPABASE DATA
-  const mappedPosts = posts.map((p) => ({
+  // ✅ MAP SUPABASE
+  const supabasePosts = posts.map((p) => ({
     id: p.id,
     title: p.title,
     slug: p.slug,
@@ -52,14 +53,30 @@ const NewsFeed = () => {
     featured: false,
   }));
 
-  const featured = mappedPosts[0];
-  const rest = mappedPosts.slice(1, 4);
+  // ✅ LOCAL ARTICLES (RESTORED)
+  const localPosts = articles.map((a) => ({
+    id: a.id,
+    title: a.title,
+    slug: a.slug,
+    image: a.image || "",
+    category: a.category,
+    summary: a.summary,
+    publishedAt: a.publishedAt,
+    readTime: a.readTime,
+    impact: a.impact,
+    featured: a.featured,
+  }));
+
+  // ✅ MERGE BOTH SOURCES
+  const allPosts = [...supabasePosts, ...localPosts];
+
+  const featured = allPosts[0];
+  const rest = allPosts.slice(1, 4);
 
   return (
     <section id="news" className="py-16">
       <div className="container">
 
-        {/* HEADER */}
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-heading text-2xl font-bold text-foreground">
             Latest News
@@ -72,25 +89,22 @@ const NewsFeed = () => {
           </Button>
         </div>
 
-        {/* EMPTY STATE */}
-        {mappedPosts.length === 0 ? (
+        {allPosts.length === 0 ? (
           <p className="text-muted-foreground">No news found</p>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            {/* FEATURED */}
             {featured && (
               <motion.div
+                className="lg:col-span-2"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="lg:col-span-2"
               >
                 <ArticleCard article={featured} featured />
               </motion.div>
             )}
 
-            {/* LIST */}
             <div className="space-y-4">
               {rest.map((article, i) => (
                 <motion.div
@@ -107,6 +121,7 @@ const NewsFeed = () => {
 
           </div>
         )}
+
       </div>
     </section>
   );

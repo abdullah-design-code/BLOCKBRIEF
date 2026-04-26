@@ -18,22 +18,16 @@ const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<any>(null);
 
-  useEffect(() => {
-    if (!slug) return;
+ useEffect(() => {
+  if (!slug) return;
 
-    client
-      .fetch(
-        `*[_type == "post" && slug.current == $slug][0]{
-          title,
-          image,
-          content,
-          category,
-          publishedAt
-        }`,
-        { slug }
-      )
-      .then(setPost);
-  }, [slug]);
+  supabase
+    .from("posts")
+    .select("*")
+    .eq("slug", slug)
+    .single()
+    .then(({ data }) => setPost(data));
+}, [slug]);
 
   if (!post) {
     return (

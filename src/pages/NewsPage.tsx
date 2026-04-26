@@ -72,6 +72,18 @@ const NewsPage = () => {
     ? articles.filter((a) => a.category === categoryLabel)
     : articles;
 
+  const allPosts = posts.map((p) => ({
+  id: p.id,
+  title: p.title,
+  slug: p.slug,
+  image: p.image,
+  category: p.category,
+  summary: p.content,
+  publishedAt: p.created_at,
+  readTime: "3 min",
+  impact: "medium",
+}));
+
   const sanityMapped = posts.map((p) => ({
     id: p._id,
     title: p.title,

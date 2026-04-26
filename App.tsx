@@ -1,10 +1,27 @@
-import { Outlet } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Home from "./pages/Home";
+import NewsPage from "./pages/NewsPage";
+import ArticlePage from "./pages/ArticlePage";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
   return (
-    <div className="min-h-screen bg-background text-foreground">    
-      <Outlet />
-    </div>
+    <BrowserRouter>
+      <Routes>
+
+        {/* PUBLIC */}
+        <Route path="/" element={<Home />} />
+        <Route path="/news" element={<NewsPage />} />
+        <Route path="/news/:slug" element={<ArticlePage />} />
+
+        {/* ADMIN */}
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 

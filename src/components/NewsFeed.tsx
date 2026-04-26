@@ -6,60 +6,65 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import ArticleCard from "@/components/ArticleCard";
 
-type SanityPost = {
-  _id: string;
+type Post = {
+  id: string;
   title: string;
   slug: string;
-  image?: any;
+  image?: string;
   category?: string;
+  content?: string;
+  created_at?: string;
 };
 
 const NewsFeed = () => {
-  const [posts, setPosts] = useState<SanityPost[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
 
-useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "post"] | order(_createdAt desc){
-          _id,
-          title,
-          "slug": coalesce(slug.current, _id),
-          image,
-          category
-        }`
-      )
-      .then((data) => {
-        console.log("NewsFeed data:", data);
-        setPosts(data || []);
-      })
-      .catch((err) => {
-        console.error("Sanity fetch error:", err);
-      });
+  // ✅ SUPABASE FETCH ONLY
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Supabase fetch error:", error);
+        return;
+      }
+
+      setPosts(data || []);
+    };
+
+    fetchPosts();
   }, []);
 
-  const sanityMapped = posts.map((p) => ({
-    id: p._id,
+  // ✅ MAP SUPABASE DATA
+  const mappedPosts = posts.map((p) => ({
+    id: p.id,
     title: p.title,
     slug: p.slug,
-    image: p.image ? urlFor(p.image).width(400).url() : "",
+    image: p.image || "",
     category: p.category || "General",
-    summary: p.title,
-    publishedAt: new Date().toISOString(),
+    summary: p.content || p.title,
+    publishedAt: p.created_at,
     readTime: "3 min",
     impact: "medium" as const,
     featured: false,
   }));
 
-  const featured = sanityMapped[0];
-  const rest = sanityMapped.slice(1, 4);
+  const featured = mappedPosts[0];
+  const rest = mappedPosts.slice(1, 4);
 
   return (
     <section id="news" className="py-16">
       <div className="container">
+
+        {/* HEADER */}
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-heading text-2xl font-bold text-foreground">
             Latest News
           </h2>
+
           <Button variant="glass" size="sm" asChild>
             <Link to="/news">
               View All <ArrowRight className="h-3.5 w-3.5" />
@@ -67,10 +72,13 @@ useEffect(() => {
           </Button>
         </div>
 
-        {sanityMapped.length === 0 ? (
-          <p className="text-muted-foreground">Loading news...</p>
+        {/* EMPTY STATE */}
+        {mappedPosts.length === 0 ? (
+          <p className="text-muted-foreground">No news found</p>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            {/* FEATURED */}
             {featured && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -81,6 +89,8 @@ useEffect(() => {
                 <ArticleCard article={featured} featured />
               </motion.div>
             )}
+
+            {/* LIST */}
             <div className="space-y-4">
               {rest.map((article, i) => (
                 <motion.div
@@ -94,6 +104,7 @@ useEffect(() => {
                 </motion.div>
               ))}
             </div>
+
           </div>
         )}
       </div>

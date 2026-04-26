@@ -30,8 +30,8 @@ type SanityPost = {
 const NewsPage = () => {
   const location = useLocation();
   const categoryLabel = categoryMap[location.pathname] || null;
+
   const [posts, setPosts] = useState<SanityPost[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     client
@@ -44,50 +44,38 @@ const NewsPage = () => {
           category
         }`
       )
-      .then((data) => {
-        console.log("SANITY POSTS:", data);
-        setPosts(data || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Sanity fetch error:", err);
-        setLoading(false);
-      });
+      .then((data) => setPosts(data || []))
+      .catch(() => setPosts([]));
   }, []);
+
+  const localFiltered = categoryLabel
+    ? articles.filter((a) => a.category === categoryLabel)
+    : articles;
 
   const sanityMapped = posts.map((p) => ({
     id: p._id,
     title: p.title,
-    slug: p.slug,
+    slug: String(p.slug),
     image: p.image ? urlFor(p.image).width(400).url() : "",
     category: p.category || "General",
     summary: p.title,
     publishedAt: new Date().toISOString(),
     readTime: "3 min",
-    impact: "medium" as const,
+    impact: "medium",
   }));
 
-  // Sanity + local articles dono mix karo
-  const localMapped = articles.map((a) => ({
-    ...a,
-    impact: (a.impact || "medium") as "high" | "medium" | "low",
-  }));
-
-  const allPosts = [...sanityMapped, ...localMapped];
-
-  const filtered = categoryLabel
-    ? allPosts.filter((a) => a.category === categoryLabel)
-    : allPosts;
+  const allPosts = [...sanityMapped, ...localFiltered].filter(
+    (p) => p.slug && p.title
+  );
 
   return (
     <div className="min-h-screen bg-background">
-      <SEO
-        title="Crypto News — BlockBrief"
-        description="Latest crypto news, updates and analysis"
-      />
+      <SEO title="Crypto News — BlockBrief" description="Latest crypto news" />
       <Header />
+
       <main className="pt-24 pb-16">
         <div className="container">
+
           <div className="flex items-center gap-3 mb-8">
             <div className="rounded-md bg-primary/10 p-2">
               <Newspaper className="h-5 w-5 text-primary" />
@@ -95,25 +83,21 @@ const NewsPage = () => {
             <h1 className="text-3xl font-bold">Latest News</h1>
           </div>
 
-          {loading ? (
-            <p className="text-muted-foreground">Loading posts...</p>
-          ) : filtered.length === 0 ? (
-            <p className="text-muted-foreground">No posts found</p>
+          {allPosts.length === 0 ? (
+            <p>No posts found</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((article, i) => (
-                <motion.div
-                  key={article.id || i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
+              {allPosts.map((article, i) => (
+                <motion.div key={article.id || i}>
                   <ArticleCard article={article} />
                 </motion.div>
               ))}
             </div>
           )}
+
         </div>
       </main>
+
       <Footer />
     </div>
   );

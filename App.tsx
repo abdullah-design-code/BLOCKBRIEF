@@ -8,7 +8,11 @@ import AdminLogin from "./pages/admin/AdminLogin";
 
 export default function App() {
   return (
-    <Routes>
+    <div style={{ color: "white", padding: 20 }}>
+      BLOCKBRIEF IS RUNNING ✅
+    </div>
+  );
+}
 
       {/* Public Routes */}
       <Route path="/" element={<Home />} />

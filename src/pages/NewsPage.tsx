@@ -8,7 +8,27 @@ import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
 import SEO from "@/components/SEO";
 import { articles } from "@/data/articles";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 
+const [posts, setPosts] = useState<any[]>([]);
+
+useEffect(() => {
+  const fetchPosts = async () => {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.log(error);
+    } else {
+      setPosts(data || []);
+    }
+  };
+
+  fetchPosts();
+}, []);
 const categoryMap: Record<string, string> = {
   "/news/bitcoin": "Bitcoin",
   "/news/ethereum": "Ethereum",

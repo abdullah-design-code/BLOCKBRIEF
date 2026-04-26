@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import App from "./App";
 
 import Home from "./pages/Home";
 import NewsPage from "./pages/NewsPage";
@@ -12,14 +13,16 @@ export default function Root() {
     <BrowserRouter>
       <Routes>
 
-        {/* PUBLIC */}
-        <Route path="/" element={<Home />} />
-        <Route path="/news" element={<NewsPage />} />
-        <Route path="/news/:slug" element={<ArticlePage />} />
+        <Route element={<App />}>
+          {/* PUBLIC */}
+          <Route path="/" element={<Home />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:slug" element={<ArticlePage />} />
 
-        {/* ADMIN */}
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          {/* ADMIN */}
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Route>
 
       </Routes>
     </BrowserRouter>

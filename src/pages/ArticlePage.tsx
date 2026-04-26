@@ -1,28 +1,41 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
 import { ArrowLeft, Calendar } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 
-import { supabase } from "@/lib/supabase";
+type Post = {
+  id: string;
+  title: string;
+  slug: string;
+  image?: string;
+  category?: string;
+  content?: string;
+  created_at?: string;
+};
 
 const ArticlePage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<Post | null>(null);
 
+  // ✅ FETCH SINGLE POST
   useEffect(() => {
     if (!slug) return;
 
     const fetchPost = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("posts")
         .select("*")
         .eq("slug", slug)
         .single();
+
+      if (error) {
+        console.error(error);
+        return;
+      }
 
       setPost(data);
     };
@@ -32,11 +45,15 @@ const ArticlePage = () => {
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center">
         Loading...
       </div>
     );
   }
+
+  const date = post.created_at
+    ? new Date(post.created_at).toLocaleDateString()
+    : "";
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,21 +70,15 @@ const ArticlePage = () => {
           <Button variant="ghost" asChild>
             <Link to="/news">
               <ArrowLeft className="h-4 w-4 mr-1" />
-              Back to News
+              Back
             </Link>
           </Button>
 
-          <div className="mt-4">
-            <Badge>{post.category}</Badge>
-          </div>
+          <h1 className="text-3xl font-bold mt-4">{post.title}</h1>
 
-          <h1 className="text-3xl font-bold mt-4">
-            {post.title}
-          </h1>
-
-          <div className="text-sm text-gray-400 mt-2 flex gap-2">
+          <div className="text-sm text-gray-400 mt-2 flex items-center gap-1">
             <Calendar className="h-4 w-4" />
-            {new Date(post.created_at).toDateString()}
+            {date}
           </div>
 
           {post.image && (
@@ -77,7 +88,7 @@ const ArticlePage = () => {
             />
           )}
 
-          <div className="mt-6 text-gray-200 leading-7 whitespace-pre-line">
+          <div className="mt-6 text-gray-200 whitespace-pre-line">
             {post.content}
           </div>
 

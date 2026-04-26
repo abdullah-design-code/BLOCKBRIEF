@@ -1,15 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import App from "./App";
 import Home from "./pages/Home";
 import NewsPage from "./pages/NewsPage";
 import ArticlePage from "./pages/ArticlePage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLogin from "./pages/admin/AdminLogin";
 
-export default function App() {
+export default function Root() {
   return (
     <BrowserRouter>
-      <Routes>
-
+      <App />
+    </BrowserRouter>
+  );
+}
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/news" element={<NewsPage />} />

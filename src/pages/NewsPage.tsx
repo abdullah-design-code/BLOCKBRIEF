@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { client, urlFor } from "@/lib/sanity";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Newspaper } from "lucide-react";
@@ -10,6 +9,18 @@ import SEO from "@/components/SEO";
 import { articles } from "@/data/articles";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+
+  fetchPosts();
+}, []);
+const categoryMap: Record<string, string> = {
+  "/news/bitcoin": "Bitcoin",
+  "/news/ethereum": "Ethereum",
+  "/news/altcoins": "Altcoins",
+  "/news/exchanges": "Exchange",
+  "/news/market": "Market",
+  "/news/regulations": "Regulation",
+  "/news/trending": "Trending",
+};
 
 const [posts, setPosts] = useState<any[]>([]);
 
@@ -39,19 +50,6 @@ const categoryMap: Record<string, string> = {
   "/news/trending": "Trending",
 };
 
-type SanityPost = {
-  _id: string;
-  title: string;
-  slug: string;
-  image?: any;
-  category?: string;
-};
-
-const NewsPage = () => {
-  const location = useLocation();
-  const categoryLabel = categoryMap[location.pathname] || null;
-
-  const [posts, setPosts] = useState<SanityPost[]>([]);
 
   useEffect(() => {
     client
@@ -84,21 +82,7 @@ const NewsPage = () => {
   impact: "medium",
 }));
 
-  const sanityMapped = posts.map((p) => ({
-    id: p._id,
-    title: p.title,
-    slug: String(p.slug),
-    image: p.image ? urlFor(p.image).width(400).url() : "",
-    category: p.category || "General",
-    summary: p.title,
-    publishedAt: new Date().toISOString(),
-    readTime: "3 min",
-    impact: "medium",
-  }));
-
-  const allPosts = [...sanityMapped, ...localFiltered].filter(
-    (p) => p.slug && p.title
-  );
+ 
 
   return (
     <div className="min-h-screen bg-background">

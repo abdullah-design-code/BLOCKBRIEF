@@ -11,12 +11,10 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* PUBLIC */}
         <Route path="/" element={<Home />} />
         <Route path="/news" element={<NewsPage />} />
         <Route path="/news/:slug" element={<ArticlePage />} />
 
-        {/* ADMIN */}
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
